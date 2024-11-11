@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Theme Park Queue Tracker</title>
+    </head>
+
+    <body>
+        <h1>Theme Park Queue Tracker</h1>
+        <button onclick="runTracking()">Run Tracking</button>
+        <button onclick="fetchWaitTime()">Get Wait Time</button>
+        <p id="wait-time-display"></p>
+
+        <script>
+            function runTracking() {
+                fetch('/run-tracking', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert(data.message);
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    });
+            }
+
+            function fetchWaitTime() {
+                fetch('/predict-wait-time')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.getElementById('wait-time-display').innerText =
+                                `Worst-case wait time: ${data.worst_case_wait_time} minutes`;
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    });
+            }
+        </script>
+    </body>
+
+</html>
